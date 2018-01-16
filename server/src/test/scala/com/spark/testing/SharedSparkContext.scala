@@ -4,12 +4,9 @@ package com.spark.testing
   import org.apache.spark.sql._
   import org.scalatest.{BeforeAndAfterAll, Suite}
 
-trait SharedSparkContextextends extends BeforeAndAfterAll { self: Suite =>
+trait SharedSparkContext extends BeforeAndAfterAll { self: Suite =>
 
-  val appID = new Date().toString + math
-  .floor(math.random * 10E4)
-  .toLong
-  .toString
+  val appID = "Test"
 
   implicit val spark = SparkSession
   .builder()

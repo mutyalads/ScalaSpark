@@ -2,6 +2,10 @@ val scalaV = "2.11.8"
 val sparkVersion = "2.2.0"
 val hadoopVersion = "2.7.3"
 
+fork in Test := true
+javaOptions ++= Seq("-Xms512M", "-Xmx2048M", "-XX:MaxPermSize=2048M", "-XX:+CMSClassUnloadingEnabled")
+parallelExecution in Test := false
+
 lazy val server = (project in file("server")).settings(
   scalaVersion := scalaV,
   scalaJSProjects := Seq(client),
@@ -13,7 +17,7 @@ lazy val server = (project in file("server")).settings(
     "com.vmunier" %% "scalajs-scripts" % "1.1.0",
     "org.apache.spark" %% "spark-core" % sparkVersion,
     "org.apache.spark" %% "spark-sql" % sparkVersion,
-    "org.scalatest" %% "scalatest" % "3.0.4",
+    "org.scalatest" %% "scalatest" % "3.0.0",
     "org.scala-lang" % "scala-reflect" % scalaV
 ),
   WebKeys.packagePrefix in Assets := "public/",
@@ -22,8 +26,6 @@ lazy val server = (project in file("server")).settings(
   EclipseKeys.preTasks := Seq(compile in Compile)
 ).enablePlugins(SbtWeb, SbtTwirl, JavaAppPackaging).
   dependsOn(sharedJvm)
-
-
 
 lazy val client = (project in file("client")).settings(
   scalaVersion := scalaV,
@@ -42,3 +44,4 @@ lazy val sharedJs = shared.js
 
 // loads the server project at sbt startup
 onLoad in Global := (onLoad in Global).value andThen {s: State => "project server" :: s}
+
